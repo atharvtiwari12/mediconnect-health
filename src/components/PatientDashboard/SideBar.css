@@ -1,0 +1,64 @@
+.sidebar > p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  color: #1a4fba;
+  margin-top: 40px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  transition: all 300ms ease;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  gap: 2rem;
+}
+.exit {
+  margin-left: 90px;
+  margin-top: 60px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 2.5rem;
+  margin-left: 30px;
+  position: relative;
+  transition: all 300ms ease;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.menuItem:hover {
+  cursor: pointer;
+}
+
+.active {
+  color: white;
+  background: #1a4fba;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.active::before {
+  content: "";
+  width: 8px;
+  height: 100%;
+  background: var(--pink);
+  margin-right: calc(1rem - 8px);
+}
+
+.activeIcon {
+  color: white;
+}

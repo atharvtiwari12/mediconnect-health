@@ -1,4 +1,22 @@
-.patient-dashboard {
-  text-align: center;
-  margin-top: 50px;
+.home {
+  display: flex;
+}
+
+.sidebar {
+  display: flex;
+  position: sticky;
+  top: 5px;
+  flex: 1;
+}
+
+.feed {
+  display: flex;
+  height: 100vh;
+  flex-direction: row;
+  flex: 3;
+  background-color: aliceblue;
+}
+.userstates {
+  display: flex;
+  flex: 1;
 }

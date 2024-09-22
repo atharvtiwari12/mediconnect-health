@@ -6,6 +6,7 @@ import RegisterPatient from "./components/RegisterPatient/RegisterPatient";
 import Login from "./components/Login/Login";
 import DoctorDashboard from "./components/DoctorDashboard/DoctorDashboard";
 import PatientDashboard from "./components/PatientDashboard/PatientDashboard";
+import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/patient-dashboard" element={<PatientDashboard />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
       </Routes>
     </Router>
   );

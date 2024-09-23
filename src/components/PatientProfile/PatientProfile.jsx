@@ -1,20 +1,15 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { auth, db, storage } from "../../firebaseConfig";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import "./RegisterPatient.css";
+import { useNavigate } from "react-router-dom";
+import "./PatientProfile.css";
 
-const RegisterPatient = () => {
+const PatientProfile = () => {
   const [formData, setFormData] = useState({
     name: "",
     dob: "",
     email: "",
-    password: "",
     phone: "",
     gender: "",
     address: "",
@@ -24,14 +19,39 @@ const RegisterPatient = () => {
     weight: "",
   });
 
+  const [profilePictureURL, setProfilePictureURL] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const docRef = doc(db, "patients", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          setFormData({
+            ...userData,
+            profilePicture: userData.profilePicture || null,
+          });
+          setProfilePictureURL(userData.profilePicture || null);
+        }
+      } else {
+        navigate("/login");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   const handleChange = (e) => {
     if (e.target.name === "profilePicture") {
+      const file = e.target.files[0];
       setFormData({
         ...formData,
-        profilePicture: e.target.files[0],
+        profilePicture: file,
       });
+      setProfilePictureURL(URL.createObjectURL(file));
     } else {
       setFormData({
         ...formData,
@@ -40,85 +60,36 @@ const RegisterPatient = () => {
     }
   };
 
-  const calculateAge = (dob) => {
-    const today = new Date();
-    const birthDate = new Date(dob);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birthDate.getDate())
-    ) {
-      age--;
-    }
-
-    return age;
-  };
-
-  const handleRegister = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    const {
-      name,
-      dob,
-      email,
-      password,
-      phone,
-      gender,
-      address,
-      profilePicture,
-      bloodGroup,
-      height,
-      weight,
-    } = formData;
+    const { profilePicture } = formData;
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+      const user = auth.currentUser;
+      let profileImageURL = formData.profilePicture;
 
-      let profileImageURL = "";
-      if (profilePicture) {
+      if (profilePicture instanceof File) {
         const storageRef = ref(storage, `profilePictures/${user.uid}`);
         await uploadBytes(storageRef, profilePicture);
         profileImageURL = await getDownloadURL(storageRef);
       }
 
-      await sendEmailVerification(user);
-      alert(
-        "A verification email has been sent to your email address. Please verify your email."
-      );
-
-      const age = calculateAge(dob);
-
-      await setDoc(doc(db, "patients", user.uid), {
-        name,
-        dob,
-        age,
-        email,
-        phone,
-        gender,
-        address,
+      await updateDoc(doc(db, "patients", user.uid), {
+        ...formData,
         profilePicture: profileImageURL || null,
-        bloodGroup: bloodGroup || null,
-        height: height ? height : 0,
-        weight: weight ? weight : 0,
-        role: "patient",
       });
 
-      navigate("/verify-email");
+      alert("Profile updated successfully!");
+      navigate("/patient-dashboard");
     } catch (error) {
-      console.error("Error registering patient:", error);
+      console.error("Error updating profile:", error);
     }
   };
 
   return (
-    <div className="register-patient">
-      <h2>Register as a Patient</h2>
-      <form onSubmit={handleRegister}>
+    <div className="update-profile">
+      <h2>Update Profile</h2>
+      <form onSubmit={handleUpdate}>
         <input
           type="text"
           name="name"
@@ -141,14 +112,7 @@ const RegisterPatient = () => {
           value={formData.email}
           onChange={handleChange}
           required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
+          disabled
         />
         <input
           type="tel"
@@ -180,31 +144,38 @@ const RegisterPatient = () => {
           accept="image/*"
           onChange={handleChange}
         />
+        {profilePictureURL && (
+          <img
+            src={profilePictureURL}
+            alt="Profile Preview"
+            style={{ width: "150px", height: "150px", borderRadius: "50%" }}
+          />
+        )}
         <input
           type="text"
           name="bloodGroup"
           placeholder="Blood Group (optional)"
-          value={formData.bloodGroup}
+          value={formData.bloodGroup || ""}
           onChange={handleChange}
         />
         <input
           type="number"
           name="height"
           placeholder="Height (in cm, optional)"
-          value={formData.height}
+          value={formData.height || ""}
           onChange={handleChange}
         />
         <input
           type="number"
           name="weight"
           placeholder="Weight (in kg, optional)"
-          value={formData.weight}
+          value={formData.weight || ""}
           onChange={handleChange}
         />
-        <button type="submit">Register</button>
+        <button type="submit">Update Profile</button>
       </form>
     </div>
   );
 };
 
-export default RegisterPatient;
+export default PatientProfile;

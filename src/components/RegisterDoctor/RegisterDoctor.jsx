@@ -95,10 +95,10 @@ const RegisterDoctor = () => {
         profilePicture,
         bio,
         doctorID,
-        role: "doctor", // Ensure the role is stored for proper redirection later
+        role: "doctor",
       });
 
-      navigate("/verify-email"); // Redirect to the VerifyEmail page
+      navigate("/verify-email");
     } catch (error) {
       console.error("Error registering doctor:", error);
     }

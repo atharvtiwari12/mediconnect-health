@@ -10,7 +10,7 @@ const DoctorDashboard = () => {
 
     const checkEmailVerification = async () => {
       if (user) {
-        await user.reload(); // Refresh the user's authentication token
+        await user.reload();
         if (!user.emailVerified) {
           navigate("/verify-email");
         }
@@ -23,7 +23,6 @@ const DoctorDashboard = () => {
   return (
     <div>
       <h2>Welcome to your Doctor Dashboard!</h2>
-      {/* Dashboard content */}
     </div>
   );
 };

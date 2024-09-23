@@ -12,40 +12,43 @@ const VerifyEmail = () => {
       const user = auth.currentUser;
 
       if (user) {
-        // Reload user to get the latest email verification status
         await user.reload();
 
-        // If email is verified, proceed to fetch the role from Firestore
         if (user.emailVerified) {
           setIsVerified(true);
+          console.log("Email is verified.");
 
-          // Try to fetch the user data from the 'patients' collection
           const patientDocRef = doc(db, "patients", user.uid);
           const patientDocSnap = await getDoc(patientDocRef);
 
           if (patientDocSnap.exists()) {
             const userData = patientDocSnap.data();
             const userRole = userData.role;
+            console.log("User role from patients collection:", userRole);
 
             if (userRole === "patient") {
+              console.log("Redirecting to patient dashboard...");
               navigate("/patient-dashboard");
             }
           } else {
-            // If not found in 'patients', check 'doctors'
             const doctorDocRef = doc(db, "doctors", user.uid);
             const doctorDocSnap = await getDoc(doctorDocRef);
 
             if (doctorDocSnap.exists()) {
               const userData = doctorDocSnap.data();
               const userRole = userData.role;
+              console.log("User role from doctors collection:", userRole);
 
               if (userRole === "doctor") {
+                console.log("Redirecting to doctor dashboard...");
                 navigate("/doctor-dashboard");
               }
             } else {
-              console.error("No user data found in patients or doctors!");
+              console.error("No user data found in patients or doctors.");
             }
           }
+        } else {
+          console.log("Email is not verified yet.");
         }
       }
     } catch (error) {

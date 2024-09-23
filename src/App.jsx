@@ -7,6 +7,7 @@ import Login from "./components/Login/Login";
 import DoctorDashboard from "./components/DoctorDashboard/DoctorDashboard";
 import PatientDashboard from "./components/PatientDashboard/PatientDashboard";
 import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
+import PatientProfile from "./components/PatientProfile/PatientProfile";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/patient-dashboard" element={<PatientDashboard />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/profile" element={<PatientProfile />} />
       </Routes>
     </Router>
   );

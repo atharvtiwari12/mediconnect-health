@@ -6,10 +6,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 const SideBar = () => {
   const [selected, setSelected] = useState(0);
-  const [color, setColor] = useState("black"); // Initial color
+  const [color, setColor] = useState("black");
 
   const handleClick = () => {
-    // Toggle between colors on click
     setColor((prevColor) => (prevColor === "black" ? "blue" : "black"));
   };
 

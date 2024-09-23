@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { auth } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import "./PatientDashboard.css";
-import SideBar from "./Sidebar";
+import SideBar from "./SideBar";
 import FeedSec from "./FeedSec";
 import UserStates from "./UserStates";
 

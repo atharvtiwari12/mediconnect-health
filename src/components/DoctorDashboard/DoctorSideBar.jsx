@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import "./SideBar.css";
+import "./DoctorSideBar.css";
 import { IconButton } from "@mui/material";
-import { sideBarData } from "./Data";
+import { sideBarData } from "./DoctorData";
 import { auth } from "../../firebaseConfig";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-const SideBar = ({ onSelect }) => {
-  const [selected, setSelected] = useState(0); // To track the selected index
+const DoctorSideBar = ({ onSelect }) => {
+  const [selected, setSelected] = useState(0);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -21,8 +21,8 @@ const SideBar = ({ onSelect }) => {
   };
 
   const handleMenuClick = (index, heading) => {
-    setSelected(index); // Update selected index
-    onSelect(heading); // Pass selected heading back to PatientDashboard
+    setSelected(index);
+    onSelect(heading);
   };
 
   return (
@@ -34,7 +34,7 @@ const SideBar = ({ onSelect }) => {
             <div
               className={selected === index ? "menuItem active" : "menuItem"}
               key={index}
-              onClick={() => handleMenuClick(index, item.heading)} // Handle menu click
+              onClick={() => handleMenuClick(index, item.heading)}
             >
               <IconButton>
                 <item.icon className="icons" style={{ color: "#6e7191" }} />
@@ -53,4 +53,4 @@ const SideBar = ({ onSelect }) => {
   );
 };
 
-export default SideBar;
+export default DoctorSideBar;

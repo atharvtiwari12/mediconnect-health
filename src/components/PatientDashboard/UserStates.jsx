@@ -6,51 +6,79 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { IconButton } from "@mui/material";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import { auth, db } from "../../firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import AppointmentsModal from "./BookAppointmentModal";
 
-const UserStates = () => {
-  const [patientData, setPatientData] = useState(null);
+const UserStates = ({ isModalOpen, setIsModalOpen, setPatientData }) => {
+  const [patientDataState, setPatientDataState] = useState(null);
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPatientData = async () => {
       const user = auth.currentUser;
 
-      if (user) {
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+
+      try {
         const docRef = doc(db, "patients", user.uid);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          setPatientData(docSnap.data());
+          const patientData = docSnap.data();
+          setPatientDataState(patientData);
+          setPatientData(patientData); // Set patient data here
         } else {
           console.error("No patient data found!");
         }
-      } else {
-        navigate("/login");
+
+        const appointmentsRef = collection(db, "appointments");
+        const q = query(appointmentsRef, where("patientId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+        const appointmentList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAppointments(appointmentList);
+      } catch (error) {
+        console.error("Error fetching patient data or appointments: ", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchPatientData();
-  }, [navigate]);
+  }, [navigate, setPatientData]); // Add setPatientData to the dependency array
 
   return (
     <div className="userstate">
       <NotificationImportantIcon className="bell" />
       <div className="Profile-sec" onClick={() => navigate("/profile")}>
         <img
-          src={patientData?.profilePicture || "download.jpeg"}
+          src={patientDataState?.profilePicture || "download.jpeg"}
           alt="Profile"
         />
-        <h3>{patientData ? patientData.name : "Loading..."}</h3>
+        <h3>{loading ? "Loading..." : patientDataState?.name}</h3>
         <div className="testi">
-          <p>{patientData ? `${patientData.age} years old` : "Loading..."}</p>
+          <p>{loading ? "Loading..." : `${patientDataState.age} years old`}</p>
           <div className="testi-side">
             <LocationOnIcon
               className="location"
               color="disabled"
               style={{ fontSize: "15px" }}
             />
-            <p>{patientData ? patientData.address : "Loading..."}</p>
+            <p>{loading ? "Loading..." : patientDataState?.address}</p>
           </div>
         </div>
       </div>
@@ -58,35 +86,49 @@ const UserStates = () => {
         <div className="block">
           <p className="main">Blood</p>
           <p className="second">
-            {patientData ? patientData.bloodGroup : "Loading..."}
+            {loading ? "Loading..." : patientDataState?.bloodGroup}
           </p>
         </div>
         <div className="block two">
           <p className="main">Height</p>
           <p className="second">
-            {patientData ? `${patientData.height} cm` : "Loading..."}
+            {loading ? "Loading..." : `${patientDataState?.height} cm`}
           </p>
         </div>
         <div className="block two">
           <p className="main">Weight</p>
           <p className="second">
-            {patientData ? `${patientData.weight} kg` : "Loading..."}
+            {loading ? "Loading..." : `${patientDataState?.weight} kg`}
           </p>
         </div>
       </div>
+
       <div className="upcoming">
-        <p>Upcoming</p>
-        <div className="alert">
-          <IconButton>
-            <NotificationsActiveIcon className="noti" color="success" />
-          </IconButton>
-          <div className="appoint">
-            <p className="txt txtt">Health appointment</p>
-            <p className="txt txttt">Dr. Atharv Tiwari</p>
-            <p className="txt-2">09:20AM - 11:30AM</p>
-          </div>
-        </div>
+        <p>Upcoming Appointments</p>
+        {appointments.length > 0 ? (
+          appointments.map((appointment) => (
+            <div key={appointment.id} className="alert">
+              <IconButton>
+                <NotificationsActiveIcon className="noti" color="success" />
+              </IconButton>
+              <div className="appoint">
+                <p className="txt txtt">{appointment.doctorName}</p>
+                <p className="txt-2">
+                  {appointment.date} {appointment.time}
+                </p>
+                <p className="status">{`Status: ${appointment.status}`}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No upcoming appointments.</p>
+        )}
       </div>
+
+      <AppointmentsModal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

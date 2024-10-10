@@ -1,0 +1,75 @@
+.dashboard-container {
+  width: 100%;
+  padding: 20px;
+}
+.feed-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 5px 10px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.input {
+  border: none;
+  margin-left: 10px;
+  outline: none;
+}
+
+.profile-overview {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.overview-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px;
+  text-align: center;
+  width: 50%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.overview-card h4 {
+  color: #333;
+}
+
+.recent-appointments {
+  margin: 20px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-list {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px;
+}
+
+.appointment-card {
+  background-color: #f8f9fa;
+  padding: 15px;
+  margin: 0px 20px;
+  border-radius: 8px;
+  width: 30%;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

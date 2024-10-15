@@ -16,6 +16,7 @@ import VerifyEmail from "./components/VerifyEmail/VerifyEmail";
 import PatientProfile from "./components/PatientProfile/PatientProfile";
 import { useAuth } from "./firebaseConfig";
 import DoctorProfile from "./components/DoctorProfile/DoctorProfile";
+import ChatPage from "./components/Chat/ChatPage";
 
 const ProtectedRoute = ({ children }) => {
   const { currentUser, loading } = useAuth();
@@ -79,6 +80,8 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/chat/:appointmentId" element={<ChatPage />} />{" "}
+        {/* Use element instead of component */}
       </Routes>
     </Router>
   );

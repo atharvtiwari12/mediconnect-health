@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import MicNoneIcon from "@mui/icons-material/MicNone";
 import ChatIcon from "@mui/icons-material/Chat";
@@ -41,14 +41,10 @@ const FeedSec = () => {
     fetchUserData();
   }, [currentUser]);
 
-  const handleChat = (appointment) => {
-    console.log(`Chat with ${appointment.doctorName}`);
-  };
-
   return (
     <div className="h-screen p-6 bg-aliceblue w-full flex flex-col justify-start">
       {/* Header Section */}
-      <div className=" flex justify-between items-center w-full max-w-5xl mx-auto">
+      <div className="flex justify-between items-center w-full max-w-5xl mx-auto">
         <h6 className="text-gray-500">Pages {location.pathname}</h6>
         <div className="flex items-center border border-gray-300 rounded-lg w-full max-w-md bg-white">
           <SearchIcon fontSize="small" className="text-gray-400 p-2" />
@@ -62,7 +58,7 @@ const FeedSec = () => {
       </div>
 
       {/* Greeting Section */}
-      <div className="w-full max-w-5xl mx-auto bg-gradient-to-r from-blue-500 to-teal-400 text-white  p-6 rounded-lg mt-6 mb-6">
+      <div className="w-full max-w-5xl mx-auto bg-gradient-to-r from-blue-500 to-teal-400 text-white p-6 rounded-lg mt-6 mb-6">
         <h3 className="text-2xl font-bold">
           Hello <span className="font-bold">{userName}</span>,
         </h3>
@@ -76,7 +72,7 @@ const FeedSec = () => {
       </div>
 
       {/* Chat Options */}
-      <div className="w-full max-w-5xl mx-auto mt-6 mb-8 ">
+      <div className="w-full max-w-5xl mx-auto mt-6 mb-8">
         <h4 className="text-gray-800 font-semibold mb-4">My Appointments</h4>
         {appointments.length > 0 ? (
           appointments.map((appointment) => (
@@ -92,10 +88,9 @@ const FeedSec = () => {
                   {appointment.date} {appointment.time}
                 </p>
               </div>
-              <ChatIcon
-                className="text-blue-500 cursor-pointer hover:text-blue-700"
-                onClick={() => handleChat(appointment)}
-              />
+              <Link to={`/chat/${appointment.id}`}>
+                <ChatIcon className="text-blue-500 cursor-pointer hover:text-blue-700" />
+              </Link>
             </div>
           ))
         ) : (

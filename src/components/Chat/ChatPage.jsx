@@ -11,14 +11,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { useParams } from "react-router-dom";
-
-const ChatHeader = ({ receiverName }) => {
-  return (
-    <div className="bg-gray-200 p-4 text-lg font-bold">
-      {receiverName ? receiverName : "Chat"}
-    </div>
-  );
-};
+import ChatHeader from "./ChatHeader"; // Import the ChatHeader
 
 const ChatPage = () => {
   const { currentUser } = useAuth();
@@ -26,6 +19,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [doctor, setDoctor] = useState(null); // To hold doctor details
+  const [patient, setPatient] = useState(null); // To hold patient details
   const [appointment, setAppointment] = useState(null); // To hold appointment details
 
   useEffect(() => {
@@ -50,10 +44,19 @@ const ChatPage = () => {
       if (appointmentSnap.exists()) {
         const appointmentData = appointmentSnap.data();
         setAppointment(appointmentData); // Store appointment data
+
+        // Fetch Doctor Details
         const doctorRef = doc(db, "doctors", appointmentData.doctorId);
         const doctorSnap = await getDoc(doctorRef);
         if (doctorSnap.exists()) {
           setDoctor(doctorSnap.data()); // Store doctor data
+        }
+
+        // Fetch Patient Details
+        const patientRef = doc(db, "patients", appointmentData.patientId);
+        const patientSnap = await getDoc(patientRef);
+        if (patientSnap.exists()) {
+          setPatient(patientSnap.data()); // Store patient data
         }
       }
     };
@@ -71,18 +74,10 @@ const ChatPage = () => {
       };
 
       // Set receiverId based on the logged-in user and appointment data
-      if (currentUser.uid === appointment.doctorId) {
-        // If the current user is the doctor
-        messageData.receiverId = appointment.patientId; // Patient is the receiver
-      } else {
-        // If the current user is the patient
-        messageData.receiverId = appointment.doctorId; // Doctor is the receiver
-      }
-
-      // Log the IDs for debugging
-      console.log("Sending Message:");
-      console.log("Sender ID:", messageData.senderId);
-      console.log("Receiver ID:", messageData.receiverId);
+      messageData.receiverId =
+        currentUser.uid === appointment.doctorId
+          ? appointment.patientId
+          : appointment.doctorId;
 
       await addDoc(
         collection(db, "chats", appointmentId, "messages"),
@@ -99,40 +94,73 @@ const ChatPage = () => {
       : appointment?.doctorName;
 
   return (
-    <div className="flex h-screen">
-      <div className="flex-1 p-4 flex flex-col">
+    <div className="flex h-screen bg-gray-100">
+      <aside className="w-64 bg-white shadow-lg p-4">
+        <h2 className="text-lg font-bold mb-4">Profile</h2>
+        {currentUser.uid === appointment?.doctorId ? (
+          <div>
+            <h3 className="font-semibold">{patient?.name}</h3>
+            <p>{patient?.details}</p>
+          </div>
+        ) : (
+          <div>
+            <h3 className="font-semibold">{doctor?.name}</h3>
+            <p>{doctor?.specialty}</p>
+          </div>
+        )}
+      </aside>
+      <div className="flex-1 flex flex-col">
         <ChatHeader receiverName={receiverName} />
-        <div className="h-full bg-white shadow-lg rounded-lg flex flex-col">
-          <div className="h-64 overflow-y-scroll mb-4 flex-1">
-            {messages.map((msg) => (
+        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`flex flex-col ${
+                msg.senderId === currentUser.uid ? "items-end" : "items-start"
+              }`}
+            >
+              {/* Sender Name */}
+              <div className="text-xs text-gray-500">
+                {msg.senderId === currentUser.uid ? "Me" : receiverName}
+              </div>
+              {/* Message Bubble */}
               <div
-                key={msg.id}
-                className={`p-2 my-2 rounded-lg ${
+                className={`p-3 rounded-lg shadow mb-1 ${
                   msg.senderId === currentUser.uid
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200 text-gray-800"
-                }`}
+                } max-w-xs`}
               >
                 {msg.text}
               </div>
-            ))}
-          </div>
-          <form onSubmit={handleSendMessage} className="flex p-2 border-t">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type your message..."
-              className="flex-grow p-2 border rounded-lg"
-            />
-            <button
-              type="submit"
-              className="ml-2 p-2 bg-blue-500 text-white rounded-lg"
-            >
-              Send
-            </button>
-          </form>
+              {/* Timestamp */}
+              <div className="text-xs text-gray-500">
+                {new Date(msg.timestamp?.toDate()).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </div>
+            </div>
+          ))}
         </div>
+        <form
+          onSubmit={handleSendMessage}
+          className="flex p-2 border-t border-gray-300 bg-white"
+        >
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type your message..."
+            className="flex-grow p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="p-3 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition"
+          >
+            Send
+          </button>
+        </form>
       </div>
     </div>
   );

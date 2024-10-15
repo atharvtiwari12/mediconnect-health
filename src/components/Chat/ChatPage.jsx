@@ -12,6 +12,14 @@ import {
 } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 
+const ChatHeader = ({ receiverName }) => {
+  return (
+    <div className="bg-gray-200 p-4 text-lg font-bold">
+      {receiverName ? receiverName : "Chat"}
+    </div>
+  );
+};
+
 const ChatPage = () => {
   const { currentUser } = useAuth();
   const { appointmentId } = useParams();
@@ -36,14 +44,17 @@ const ChatPage = () => {
   }, [appointmentId]);
 
   useEffect(() => {
-    // Fetch doctor details and appointment based on appointmentId
     const fetchDetails = async () => {
       const appointmentRef = doc(db, "appointments", appointmentId);
       const appointmentSnap = await getDoc(appointmentRef);
       if (appointmentSnap.exists()) {
         const appointmentData = appointmentSnap.data();
         setAppointment(appointmentData); // Store appointment data
-        setDoctor(appointmentData); // Assuming appointment contains doctor info
+        const doctorRef = doc(db, "doctors", appointmentData.doctorId);
+        const doctorSnap = await getDoc(doctorRef);
+        if (doctorSnap.exists()) {
+          setDoctor(doctorSnap.data()); // Store doctor data
+        }
       }
     };
 
@@ -56,18 +67,22 @@ const ChatPage = () => {
       const messageData = {
         text: newMessage,
         timestamp: new Date(),
+        senderId: currentUser.uid, // Always set senderId to currentUser
       };
 
-      // Check if currentUser is a doctor or patient
-      if (currentUser.uid === doctor.doctorId) {
-        // Doctor is sending the message
-        messageData.senderId = doctor.doctorId; // Set senderId to doctor's ID
-        messageData.receiverId = appointment.patientId; // Set receiverId to patient's ID
+      // Set receiverId based on the logged-in user and appointment data
+      if (currentUser.uid === appointment.doctorId) {
+        // If the current user is the doctor
+        messageData.receiverId = appointment.patientId; // Patient is the receiver
       } else {
-        // Patient is sending the message
-        messageData.senderId = currentUser.uid; // Set senderId to patient's ID
-        messageData.receiverId = doctor.doctorId; // Set receiverId to doctor's ID
+        // If the current user is the patient
+        messageData.receiverId = appointment.doctorId; // Doctor is the receiver
       }
+
+      // Log the IDs for debugging
+      console.log("Sending Message:");
+      console.log("Sender ID:", messageData.senderId);
+      console.log("Receiver ID:", messageData.receiverId);
 
       await addDoc(
         collection(db, "chats", appointmentId, "messages"),
@@ -77,11 +92,16 @@ const ChatPage = () => {
     }
   };
 
+  // Determine receiver's name based on the appointment
+  const receiverName =
+    currentUser.uid === appointment?.doctorId
+      ? appointment.patientName
+      : appointment?.doctorName;
+
   return (
     <div className="flex h-screen">
-      {/* Sidebar and Chat UI Here */}
       <div className="flex-1 p-4 flex flex-col">
-        {/* Messages and Input Form */}
+        <ChatHeader receiverName={receiverName} />
         <div className="h-full bg-white shadow-lg rounded-lg flex flex-col">
           <div className="h-64 overflow-y-scroll mb-4 flex-1">
             {messages.map((msg) => (

@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 
 const ChatBox = ({ appointment }) => {
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth(); // Ensure this has the user data
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
 
@@ -32,13 +32,31 @@ const ChatBox = ({ appointment }) => {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (newMessage.trim()) {
-      await addDoc(collection(db, "chats", appointment.id, "messages"), {
+      const messageData = {
         text: newMessage,
-        senderId: currentUser.uid,
-        receiverId: appointment.doctorId, // Assuming you have doctorId in appointment
+        senderId: currentUser.uid, // The ID of the user sending the message
         timestamp: new Date(),
-      });
-      setNewMessage("");
+      };
+
+      // Determine receiverId based on current user's role
+      // Assuming currentUser contains information about whether the user is a doctor or patient
+      if (currentUser.role === "doctor") {
+        messageData.receiverId = appointment.patientId; // Receiver is the patient
+      } else {
+        messageData.receiverId = appointment.doctorId; // Receiver is the doctor
+      }
+
+      // Check if receiverId is defined before sending the message
+      if (!messageData.receiverId) {
+        console.error("Receiver ID is undefined. Cannot send message.");
+        return;
+      }
+
+      await addDoc(
+        collection(db, "chats", appointment.id, "messages"),
+        messageData
+      );
+      setNewMessage(""); // Clear input after sending
     }
   };
 

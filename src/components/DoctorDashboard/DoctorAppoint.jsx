@@ -37,8 +37,10 @@ const DoctorAppoint = () => {
     fetchAcceptedAppointments();
   }, []);
 
-  const handleChatClick = (appointmentId) => {
+  const handleChatClick = (appointmentId, patientName) => {
     navigate(`/chat/${appointmentId}`); // Navigate to the chat page with appointmentId
+    // Set patient name for sidebar display
+    localStorage.setItem("currentPatientName", patientName);
   };
 
   return (
@@ -49,10 +51,10 @@ const DoctorAppoint = () => {
           <div
             key={appointment.id}
             className="appointment-card"
-            onClick={() => handleChatClick(appointment.id)}
+            onClick={() =>
+              handleChatClick(appointment.id, appointment.patientName)
+            } // Pass patientName to handleChatClick
           >
-            {" "}
-            {/* Add onClick to navigate to chat */}
             <h3>{appointment.patientName}</h3>
             <p>Date: {appointment.date}</p>
             <p>Time: {appointment.time}</p>

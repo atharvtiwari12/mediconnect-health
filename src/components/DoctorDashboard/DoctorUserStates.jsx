@@ -58,6 +58,8 @@ const DoctorUserStates = () => {
           id: doc.id,
           ...doc.data(),
         }));
+
+        // Update state with all appointments
         setAppointments(appointmentsList);
       } catch (error) {
         console.error("Error fetching appointments: ", error);
@@ -125,36 +127,74 @@ const DoctorUserStates = () => {
       </div>
 
       <div className="appointments">
-        <h4>Appointments</h4>
-        {appointments.length > 0 ? (
-          appointments.map((appointment) => (
-            <div key={appointment.id} className="appointment">
-              <p>
-                <strong>Patient:</strong> {appointment.patientName}
-              </p>
-              <p>
-                <strong>Date:</strong> {appointment.date}
-              </p>
-              <p>
-                <strong>Time:</strong> {appointment.time}
-              </p>
-              <p>
-                <strong>Status:</strong> {appointment.status}
-              </p>
-              <div className="appointment-actions">
-                <CheckIcon
-                  onClick={() => handleAcceptAppointment(appointment.id)}
-                  style={{ cursor: "pointer", color: "green" }}
-                />
-                <CloseIcon
-                  onClick={() => handleRejectAppointment(appointment.id)}
-                  style={{ cursor: "pointer", color: "red" }}
-                />
+        <h4>Accepted Appointments</h4>
+        {appointments.filter((appointment) => appointment.status === "accepted")
+          .length > 0 ? (
+          appointments
+            .filter((appointment) => appointment.status === "accepted")
+            .map((appointment) => (
+              <div key={appointment.id} className="appointment">
+                <p>
+                  <strong>Patient:</strong> {appointment.patientName}
+                </p>
+                <p>
+                  <strong>Date:</strong> {appointment.date}
+                </p>
+                <p>
+                  <strong>Time:</strong> {appointment.time}
+                </p>
+                <p>
+                  <strong>Status:</strong> {appointment.status}
+                </p>
+                <div className="appointment-actions">
+                  <CheckIcon
+                    onClick={() => handleAcceptAppointment(appointment.id)}
+                    style={{ cursor: "pointer", color: "green" }}
+                  />
+                  <CloseIcon
+                    onClick={() => handleRejectAppointment(appointment.id)}
+                    style={{ cursor: "pointer", color: "red" }}
+                  />
+                </div>
               </div>
-            </div>
-          ))
+            ))
         ) : (
-          <p>No appointments found.</p>
+          <p>No accepted appointments found.</p>
+        )}
+
+        <h4>Pending Appointments</h4>
+        {appointments.filter((appointment) => appointment.status === "pending")
+          .length > 0 ? (
+          appointments
+            .filter((appointment) => appointment.status === "pending")
+            .map((appointment) => (
+              <div key={appointment.id} className="appointment">
+                <p>
+                  <strong>Patient:</strong> {appointment.patientName}
+                </p>
+                <p>
+                  <strong>Date:</strong> {appointment.date}
+                </p>
+                <p>
+                  <strong>Time:</strong> {appointment.time}
+                </p>
+                <p>
+                  <strong>Status:</strong> {appointment.status}
+                </p>
+                <div className="appointment-actions">
+                  <CheckIcon
+                    onClick={() => handleAcceptAppointment(appointment.id)}
+                    style={{ cursor: "pointer", color: "green" }}
+                  />
+                  <CloseIcon
+                    onClick={() => handleRejectAppointment(appointment.id)}
+                    style={{ cursor: "pointer", color: "red" }}
+                  />
+                </div>
+              </div>
+            ))
+        ) : (
+          <p>No pending appointments found.</p>
         )}
       </div>
     </div>

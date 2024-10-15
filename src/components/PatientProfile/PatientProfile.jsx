@@ -3,7 +3,6 @@ import { auth, db, storage } from "../../firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
-import "./PatientProfile.css";
 
 const PatientProfile = () => {
   const [formData, setFormData] = useState({
@@ -87,93 +86,179 @@ const PatientProfile = () => {
   };
 
   return (
-    <div className="update-profile">
-      <h2>Update Profile</h2>
-      <form onSubmit={handleUpdate}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="date"
-          name="dob"
-          value={formData.dob}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          disabled
-        />
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Phone Number"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="gender"
-          placeholder="Gender"
-          value={formData.gender}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Address"
-          value={formData.address}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="file"
-          name="profilePicture"
-          accept="image/*"
-          onChange={handleChange}
-        />
-        {profilePictureURL && (
-          <img
-            src={profilePictureURL}
-            alt="Profile Preview"
-            style={{ width: "150px", height: "150px", borderRadius: "50%" }}
-          />
-        )}
-        <input
-          type="text"
-          name="bloodGroup"
-          placeholder="Blood Group (optional)"
-          value={formData.bloodGroup || ""}
-          onChange={handleChange}
-        />
-        <input
-          type="number"
-          name="height"
-          placeholder="Height (in cm, optional)"
-          value={formData.height || ""}
-          onChange={handleChange}
-        />
-        <input
-          type="number"
-          name="weight"
-          placeholder="Weight (in kg, optional)"
-          value={formData.weight || ""}
-          onChange={handleChange}
-        />
-        <button type="submit">Update Profile</button>
-      </form>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-3xl bg-white shadow-md rounded-lg p-8">
+        <h2 className="text-2xl font-bold text-center mb-6">Update Profile</h2>
+        <form onSubmit={handleUpdate}>
+          {/* Full Name */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Full Name:
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* Date of Birth */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Date of Birth:
+            </label>
+            <input
+              type="date"
+              name="dob"
+              value={formData.dob}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* Email */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Email Address:
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+              disabled
+            />
+          </div>
+
+          {/* Phone */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Phone Number:
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* Gender */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Gender:
+            </label>
+            <input
+              type="text"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* Address */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Address:
+            </label>
+            <input
+              type="text"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* Profile Picture */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Profile Picture:
+            </label>
+            <input
+              type="file"
+              name="profilePicture"
+              accept="image/*"
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Profile Picture Preview */}
+          {profilePictureURL && (
+            <div className="flex justify-center mb-4">
+              <img
+                src={profilePictureURL}
+                alt="Profile Preview"
+                className="w-32 h-32 rounded-full object-cover"
+              />
+            </div>
+          )}
+
+          {/* Blood Group */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Blood Group (Optional):
+            </label>
+            <input
+              type="text"
+              name="bloodGroup"
+              value={formData.bloodGroup || ""}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Height */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Height (in cm, Optional):
+            </label>
+            <input
+              type="number"
+              name="height"
+              value={formData.height || ""}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Weight */}
+          <div className="flex items-center mb-4">
+            <label className="w-1/3 text-sm font-medium text-gray-700">
+              Weight (in kg, Optional):
+            </label>
+            <input
+              type="number"
+              name="weight"
+              value={formData.weight || ""}
+              onChange={handleChange}
+              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Update Button */}
+          <div className="mt-6">
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-300"
+            >
+              Update Profile
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

@@ -82,6 +82,28 @@ const PatAppoint = ({ patientData }) => {
     setSelectedTime("");
   };
 
+  // Function to check existing appointments
+  const checkExistingAppointments = async (doctorId, patientId) => {
+    const appointmentCollection = collection(db, "appointments");
+    const appointmentSnapshot = await getDocs(appointmentCollection);
+
+    // Get current date
+    const currentDate = new Date();
+
+    // Filter for existing appointments with the same doctor and patient
+    const existingAppointments = appointmentSnapshot.docs.filter((doc) => {
+      const data = doc.data();
+      return (
+        data.doctorId === doctorId &&
+        data.patientId === patientId &&
+        (data.status === "pending" || data.status === "accepted") &&
+        new Date(data.date) >= currentDate // Check if the appointment is due
+      );
+    });
+
+    return existingAppointments;
+  };
+
   // Handle appointment booking
   const handleBookAppointment = async () => {
     if (!currentUser) {
@@ -94,6 +116,21 @@ const PatAppoint = ({ patientData }) => {
       alert("Please select a doctor, date, and time.");
       return;
     }
+
+    // Check for existing appointments
+    const existingAppointments = await checkExistingAppointments(
+      selectedDoctor.id,
+      currentUser.uid
+    );
+
+    if (existingAppointments.length > 0) {
+      alert(
+        "You already have a pending or accepted appointment with this doctor."
+      );
+      handleCloseModal();
+      return;
+    }
+
     console.log("Patient Data: ", patientData);
 
     const appointmentData = {
@@ -141,7 +178,7 @@ const PatAppoint = ({ patientData }) => {
       {/* Specialization Filter */}
       <div className="cards-head">
         <div className="drop">
-          <p>Specialization</p>
+          <p>Specialization :</p>
           <select
             className="specialization-dropdown"
             value={selectedSpecialization}

@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import "./Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -38,26 +37,39 @@ const Login = () => {
   };
 
   return (
-    <div className="login">
-      <h2>Login</h2>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+          Login
+        </h2>
+        {errorMessage && (
+          <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+        )}
+        <form onSubmit={handleLogin} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:outline-none"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring focus:ring-indigo-200 focus:outline-none"
+          />
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 text-white font-bold py-2 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring focus:ring-indigo-300"
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,9 @@
 .dashboard-container {
   width: 100%;
+  min-height: 100vh;
   padding: 20px;
 }
+
 .feed-head {
   display: flex;
   justify-content: space-between;
@@ -26,17 +28,24 @@
 
 .profile-overview {
   display: flex;
-  justify-content: space-around;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
+}
+
+.overview-cards {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
 
 .overview-card {
   background-color: #ffffff;
   border-radius: 10px;
-  padding: 20px;
-  margin: 20px;
+  padding: 15px;
+  margin: 0 10px; /* Reduced margin for compactness */
   text-align: center;
-  width: 50%;
+  width: 30%; /* Adjusted width for better layout */
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -45,26 +54,10 @@
 }
 
 .recent-appointments {
-  margin: 20px;
+  margin: 20px 0;
   background-color: #ffffff;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.appointment-list {
-  display: flex;
-  justify-content: space-around;
-  margin: 20px;
-}
-
-.appointment-card {
-  background-color: #f8f9fa;
-  padding: 15px;
-  margin: 0px 20px;
-  border-radius: 8px;
-  width: 30%;
-  text-align: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -72,4 +65,82 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.appointment-list {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping for two cards per row */
+  justify-content: space-between; /* Space out cards evenly */
+  margin: 20px 0;
+}
+
+.appointment-card {
+  background-color: #f8f9fa;
+  padding: 15px;
+  margin: 10px; /* Adjusted margin for spacing */
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between; /* Align items on both ends */
+  align-items: center; /* Vertically center the content */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  width: calc(48% - 20px); /* Width calculation to allow two cards per row */
+}
+
+.appointment-card:hover {
+  transform: scale(1.02); /* Slight zoom on hover */
+}
+
+.appointment-details {
+  display: flex;
+  align-items: center; /* Center items vertically */
+  width: 100%; /* Ensure it takes full width */
+}
+
+.patient-info {
+  display: flex;
+  flex-direction: column; /* Stack image and name */
+  align-items: center; /* Center align the content */
+  margin-right: 15px; /* Space between photo and right section */
+}
+
+.patient-photo {
+  width: 60px; /* Set width for patient photo */
+  height: 60px; /* Set height for patient photo */
+  border-radius: 50%; /* Circular image */
+  object-fit: cover; /* Maintain aspect ratio */
+  border: 2px solid #1a4fba; /* Optional: border to highlight image */
+}
+
+.patient-name {
+  margin-top: 5px; /* Space between photo and name */
+  font-size: 14px; /* Adjust font size as needed */
+  color: #333; /* Color for the name */
+  text-align: center; /* Center the text */
+}
+
+.appointment-info {
+  display: flex;
+  flex-direction: column; /* Stack date and time */
+  align-items: flex-start; /* Align text to the start */
+  text-align: left; /* Align text to the left */
+}
+
+.appointment-date-time {
+  display: flex;
+  flex-direction: column; /* Stack labels and values vertically */
+  margin-right: 10px; /* Space between date/time and icon */
+}
+
+.appointment-label {
+  font-size: 12px; /* Smaller font for labels */
+  color: #888; /* Lighter color for labels */
+  margin: 0; /* Reset margin */
+}
+
+.appointment-date,
+.appointment-time {
+  margin: 0; /* Reset margin */
+  font-size: 14px; /* Adjust font size as needed */
+  color: #333; /* Color for the date/time */
 }

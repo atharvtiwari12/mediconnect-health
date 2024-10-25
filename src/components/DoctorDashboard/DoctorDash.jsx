@@ -6,7 +6,9 @@ import { Button } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { db, auth } from "../../firebaseConfig"; // Adjust import if needed
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { FaComment } from "react-icons/fa"; // Importing the chat icon from react-icons
 import "./DoctorDash.css";
+import download from "../../assets/download.jpeg";
 
 const DoctorDash = () => {
   const location = useLocation();
@@ -91,13 +93,24 @@ const DoctorDash = () => {
           {acceptedAppointments.length > 0 ? (
             acceptedAppointments.map((appointment) => (
               <div key={appointment.id} className="appointment-card">
-                <h3>{appointment.patientName}</h3>
-                <p>Date: {appointment.date}</p>
-                <p>Time: {appointment.time}</p>
-                <span>
-                  <MicNoneIcon color="primary" style={{ cursor: "pointer" }} />{" "}
-                  {/* Chat Icon */}
-                </span>
+                <div className="appointment-details">
+                  <div className="patient-info">
+                    <img
+                      src={appointment.patientPhoto || download} // Placeholder if no photo
+                      alt={`${appointment.patientName}'s profile`}
+                      className="patient-photo"
+                    />
+                    <h3 className="patient-name">{appointment.patientName}</h3>
+                  </div>
+                  <div className="appointment-info">
+                    <div className="appointment-date-time">
+                      <p className="appointment-label">Date:</p>
+                      <p className="appointment-date">{appointment.date}</p>
+                      <p className="appointment-label">Time:</p>
+                      <p className="appointment-time">{appointment.time}</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))
           ) : (

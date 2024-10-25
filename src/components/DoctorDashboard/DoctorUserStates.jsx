@@ -127,41 +127,6 @@ const DoctorUserStates = () => {
       </div>
 
       <div className="appointments">
-        <h4>Accepted Appointments</h4>
-        {appointments.filter((appointment) => appointment.status === "accepted")
-          .length > 0 ? (
-          appointments
-            .filter((appointment) => appointment.status === "accepted")
-            .map((appointment) => (
-              <div key={appointment.id} className="appointment">
-                <p>
-                  <strong>Patient:</strong> {appointment.patientName}
-                </p>
-                <p>
-                  <strong>Date:</strong> {appointment.date}
-                </p>
-                <p>
-                  <strong>Time:</strong> {appointment.time}
-                </p>
-                <p>
-                  <strong>Status:</strong> {appointment.status}
-                </p>
-                <div className="appointment-actions">
-                  <CheckIcon
-                    onClick={() => handleAcceptAppointment(appointment.id)}
-                    style={{ cursor: "pointer", color: "green" }}
-                  />
-                  <CloseIcon
-                    onClick={() => handleRejectAppointment(appointment.id)}
-                    style={{ cursor: "pointer", color: "red" }}
-                  />
-                </div>
-              </div>
-            ))
-        ) : (
-          <p>No accepted appointments found.</p>
-        )}
-
         <h4>Pending Appointments</h4>
         {appointments.filter((appointment) => appointment.status === "pending")
           .length > 0 ? (
@@ -195,6 +160,31 @@ const DoctorUserStates = () => {
             ))
         ) : (
           <p>No pending appointments found.</p>
+        )}
+
+        <h4>Rejected Appointments</h4>
+        {appointments.filter((appointment) => appointment.status === "rejected")
+          .length > 0 ? (
+          appointments
+            .filter((appointment) => appointment.status === "rejected")
+            .map((appointment) => (
+              <div key={appointment.id} className="appointment">
+                <p>
+                  <strong>Patient:</strong> {appointment.patientName}
+                </p>
+                <p>
+                  <strong>Date:</strong> {appointment.date}
+                </p>
+                <p>
+                  <strong>Time:</strong> {appointment.time}
+                </p>
+                <p>
+                  <strong>Status:</strong> {appointment.status}
+                </p>
+              </div>
+            ))
+        ) : (
+          <p>No rejected appointments found.</p>
         )}
       </div>
     </div>

@@ -5,6 +5,12 @@ import { AiFillProfile } from "react-icons/ai";
 import { GiDoctorFace } from "react-icons/gi";
 import { MdMedicalServices } from "react-icons/md";
 import Medicalhero from "../../assets/Medicalhero.avif"; // Adjust import if necessary
+import appointmentbooking from "../../assets/appointmentbooking.avif";
+import medicalhistory from "../../assets/medicalhistory.jpg";
+import personalisedcare from "../../assets/personalisedcare.jpg";
+import securemessaging from "../../assets/securemessaging.jpg";
+import videoconsultations from "../../assets/videoconsultations.jpg";
+import patient from "../../assets/patient.jpg";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -80,35 +86,35 @@ const MainPage = () => {
               title: "Appointment Booking",
               description:
                 "Easily schedule your appointments with your preferred doctors and get reminders for upcoming visits.",
-              imageUrl: Medicalhero,
+              imageUrl: appointmentbooking,
             },
             {
               icon: <FaComments className="text-3xl mb-2" />,
               title: "Secure Messaging",
               description:
                 "Communicate securely with your healthcare providers and get answers to your queries without hassle.",
-              imageUrl: Medicalhero,
+              imageUrl: securemessaging,
             },
             {
               icon: <FaVideo className="text-3xl mb-2" />,
               title: "Video Consultations",
               description:
                 "Experience healthcare from the comfort of your home with our easy-to-use video call feature.",
-              imageUrl: Medicalhero,
+              imageUrl: videoconsultations,
             },
             {
               icon: <AiFillProfile className="text-3xl mb-2" />,
               title: "Access Medical History",
               description:
                 "Keep track of your medical records and history in one secure place for easy access when needed.",
-              imageUrl: Medicalhero,
+              imageUrl: medicalhistory,
             },
             {
               icon: <GiDoctorFace className="text-3xl mb-2" />,
               title: "Personalized Care",
               description:
                 "Get personalized health plans and care recommendations tailored to your unique health needs.",
-              imageUrl: Medicalhero,
+              imageUrl: personalisedcare,
             },
             {
               icon: <MdMedicalServices className="text-3xl mb-2" />,
@@ -129,7 +135,7 @@ const MainPage = () => {
               <img
                 src={imageUrl}
                 alt={title}
-                className="mb-4 rounded-md shadow-sm max-w-full h-auto" // Ensures responsive image display
+                className="mb-4 rounded-md shadow-sm w-60 h-60 object-cover" // Ensures equal dimensions
               />
               <p className="text-gray-600 text-center">{description}</p>
             </div>
@@ -172,7 +178,7 @@ const MainPage = () => {
             {/* Register as Patient Card */}
             <div className="bg-white rounded-lg shadow-md p-2 flex flex-col items-center transition-transform transform hover:scale-105 max-w-xs">
               <img
-                src={Medicalhero} // Use a smaller image or adjust size as needed
+                src={patient} // Use a smaller image or adjust size as needed
                 alt="Patient"
                 className="mb-2 rounded-md shadow-sm w-20 h-20" // Smaller size
               />

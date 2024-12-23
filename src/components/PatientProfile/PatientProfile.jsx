@@ -86,178 +86,188 @@ const PatientProfile = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-3xl bg-white shadow-md rounded-lg p-8">
-        <h2 className="text-2xl font-bold text-center mb-6">Update Profile</h2>
-        <form onSubmit={handleUpdate}>
-          {/* Full Name */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Full Name:
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          {/* Date of Birth */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Date of Birth:
-            </label>
-            <input
-              type="date"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          {/* Email */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Email Address:
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-              disabled
-            />
-          </div>
-
-          {/* Phone */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Phone Number:
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          {/* Gender */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Gender:
-            </label>
-            <input
-              type="text"
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          {/* Address */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Address:
-            </label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          {/* Profile Picture */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Profile Picture:
-            </label>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-8">
+        <h2 className="text-xl font-bold text-gray-700 mb-8 border-b pb-4">
+          Account Settings
+        </h2>
+        <div className="flex gap-8">
+          {/* Profile Picture Section */}
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-32 h-32 bg-gray-200 rounded-lg border border-gray-300 flex items-center justify-center">
+              {profilePictureURL ? (
+                <img
+                  src={profilePictureURL}
+                  alt="Profile Preview"
+                  className="w-full h-full rounded-lg object-cover"
+                />
+              ) : (
+                <span className="text-gray-500 text-sm">Upload your photo</span>
+              )}
+            </div>
             <input
               type="file"
               name="profilePicture"
               accept="image/*"
               onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="text-xs text-blue-500 mt-2"
             />
           </div>
 
-          {/* Profile Picture Preview */}
-          {profilePictureURL && (
-            <div className="flex justify-center mb-4">
-              <img
-                src={profilePictureURL}
-                alt="Profile Preview"
-                className="w-32 h-32 rounded-full object-cover"
+          {/* Form Section */}
+          <form
+            onSubmit={handleUpdate}
+            className="flex-grow grid grid-cols-2 gap-6"
+          >
+            <div className="col-span-1">
+              <label className="text-gray-600 text-sm mb-1 block">
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
               />
             </div>
-          )}
 
-          {/* Blood Group */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Blood Group (Optional):
-            </label>
-            <input
-              type="text"
-              name="bloodGroup"
-              value={formData.bloodGroup || ""}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+            <div className="col-span-1">
+              <label className="text-gray-600 text-sm mb-1 block">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-md bg-gray-100 text-gray-500 cursor-not-allowed"
+                disabled
+              />
+            </div>
 
-          {/* Height */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Height (in cm, Optional):
-            </label>
-            <input
-              type="number"
-              name="height"
-              value={formData.height || ""}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+            <div className="col-span-1">
+              <label className="text-gray-600 text-sm mb-1 block">
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
-          {/* Weight */}
-          <div className="flex items-center mb-4">
-            <label className="w-1/3 text-sm font-medium text-gray-700">
-              Weight (in kg, Optional):
-            </label>
-            <input
-              type="number"
-              name="weight"
-              value={formData.weight || ""}
-              onChange={handleChange}
-              className="w-2/3 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+            <div className="col-span-1">
+              <label className="text-gray-600 text-sm mb-1 block">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
 
-          {/* Update Button */}
-          <div className="mt-6">
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-300"
-            >
-              Update Profile
-            </button>
-          </div>
-        </form>
+            <div className="col-span-1">
+              <label className="text-gray-600 text-sm mb-1 block">Gender</label>
+              <input
+                type="text"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div className="col-span-1">
+              <label className="text-gray-600 text-sm mb-1 block">
+                Blood Group
+              </label>
+              <input
+                type="text"
+                name="bloodGroup"
+                value={formData.bloodGroup}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div className="col-span-1">
+              <label className="text-gray-600 text-sm mb-1 block">
+                Height (cm)
+              </label>
+              <input
+                type="number"
+                name="height"
+                value={formData.height}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div className="col-span-1">
+              <label className="text-gray-600 text-sm mb-1 block">
+                Weight (kg)
+              </label>
+              <input
+                type="number"
+                name="weight"
+                value={formData.weight}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div className="col-span-2">
+              <label className="text-gray-600 text-sm mb-1 block">
+                Address
+              </label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+
+            {/* Update and Reset Buttons */}
+            <div className="col-span-2 flex gap-4 mt-6">
+              <button
+                type="submit"
+                className="w-1/2 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+              >
+                Update Profile
+              </button>
+              <button
+                type="reset"
+                className="w-1/2 bg-gray-200 text-gray-600 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-300"
+                onClick={() =>
+                  setFormData({
+                    name: "",
+                    dob: "",
+                    email: "",
+                    phone: "",
+                    gender: "",
+                    address: "",
+                    profilePicture: null,
+                    bloodGroup: "",
+                    height: "",
+                    weight: "",
+                  })
+                }
+              >
+                Reset
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

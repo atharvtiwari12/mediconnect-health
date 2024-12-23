@@ -1,4 +1,3 @@
-// src/firebaseConfig.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from "firebase/app";
